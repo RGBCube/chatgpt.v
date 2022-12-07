@@ -4,7 +4,7 @@
 
 [Docs](https://rgbcube.github.io/docs/chatgpt) | [Examples](https://github.com/RGBCube/chatgpt.v/tree/master/examples)
 
-A Discord API wrapper for the V programming language.
+A ChatGPT wrapper for the V programming language. 
 
 </div>
 
