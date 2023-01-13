@@ -16,7 +16,7 @@ pub struct GenerationConfig {
 	// generating text. A higher temperature will produce more varied and
 	// creative completions, while a lower temperature will produce more
 	// predictable and repetitive completions.
-	temperature f32 // Min: 0, Max: 2.
+	temperature f32 = 0.7 // Min: 0, Max: 2.
 	// This parameter is used to specify the fraction of the mass of the
 	// distribution to keep when selecting the next token. For example,
 	// if you set top_p to 0.5, ChatGPT will only consider the tokens
