@@ -2,7 +2,7 @@
 
 <h1>chatgpt.v</h1>
 
-[Docs](https://rgbcube.github.io/docs/chatgpt) | [Examples](https://github.com/RGBCube/chatgpt.v/tree/master/examples)
+[Docs](https://rgbcube.github.io/docs/chatgpt)<!-- | [Examples](https://github.com/RGBCube/chatgpt.v/tree/master/examples) -->
 
 A ChatGPT wrapper for the V programming language. 
 
