@@ -49,12 +49,13 @@ pub fn (c Client) generate_multiple(prompt string, n u8, config GenerationConfig
 		data: dump(json.encode(Body{
 			prompt: prompt
 			max_tokens: config.max_tokens
-			stop: config.stop or { '' }
-			n: n
 			temperature: config.temperature
 			top_p: config.top_p
-			frequency_penalty: config.frequency_penalty
+			n: n
+			stop: config.stop
 			presence_penalty: config.presence_penalty
+			frequency_penalty: config.frequency_penalty
+			best_of: config.best_of
 		}))
 	)!
 }
