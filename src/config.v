@@ -6,33 +6,25 @@ module chatgpt
 pub struct GenerationConfig {
 	// This specifies the maximum number of tokens (common sequences of characters
 	// found in text) (basically words) ChatGPT should generate in its response.
-	max_tokens int = 256 // Min: 1, Max: 10240.
+	max_tokens u16 = 256 // Min: 1, Max: 10240.
+	// This specifies the level of "creativity" or "randomness" to use when
+	// generating text. A higher temperature will produce more varied and
+	// creative completions, while a lower temperature will produce more
+	// predictable and repetitive completions.
+	temperature f32 = 1 // Min: 0, Max: 2.
+	// This parameter is used to specify the fraction of the mass of the
+	// distribution to keep when selecting the next token. For example,
+	// if you set top_p to 0.4, ChatGPT will only consider the tokens
+	// with the highest probabilities (up to 40% of the total probability
+	// mass) when generating text. This can be used to produce more predictable
+	// and consistent completions (lower = more predictable), as the model will only select tokens from the
+	// most likely options.
+	top_p f32 = 1 // Min: 0, Max: 1.
 	// This specifies a sequence of characters that, when encountered by the
 	// model, will cause it to stop generating text. By default, it is set to
 	// none, which means that ChatGPT will not stop generating text until it
 	// reaches the maximum number of tokens specified by max_tokens.
 	stop ?string
-	// This specifies the level of "creativity" or "randomness" to use when
-	// generating text. A higher temperature will produce more varied and
-	// creative completions, while a lower temperature will produce more
-	// predictable and repetitive completions.
-	temperature f32 // Min: 0, Max: 2.
-	// This parameter is used to specify the fraction of the mass of the
-	// distribution to keep when selecting the next token. For example,
-	// if you set top_p to 0.5, ChatGPT will only consider the tokens
-	// with the highest probabilities (up to 50% of the total probability
-	// mass) when generating text. This can be used to produce more predictable
-	// and consistent completions, as the model will only select tokens from the
-	// most likely options.
-	top_p f32 = 1 // Min: 0, Max: 1.
-	// This parameter is used to specify a penalty to apply to the log probability
-	// of each token, based on how often it has been generated previously in
-	// the sequence. For example, if you set frequency_penalty to 0.1, ChatGPT
-	// will penalize tokens that have been generated more frequently in the
-	// sequence, making them less likely to be selected. This can be used to produce
-	// more diverse and interesting completions, as the model will avoid repeating
-	// the same tokens over and over.
-	frequency_penalty f32 // Min: 0, Max: 1.
 	// This parameter is used to specify a penalty to apply to the log probability
 	// of each token, based on how often it appears in the training data. For
 	// example, if you set presence_penalty to 0.1, the model will penalize
@@ -40,18 +32,26 @@ pub struct GenerationConfig {
 	// to be selected. This can be used to produce more realistic and fluent
 	// completions, as the model will avoid generating rare or unusual tokens
 	// that do not appear often in real-world text.
-	presence_penalty f32 // Min: 0, Max: 1.
+	presence_penalty f32 // Min: -2.0, Max: 2.0.
+	// This parameter is used to specify a penalty to apply to the log probability
+	// of each token, based on how often it has been generated previously in
+	// the sequence. For example, if you set frequency_penalty to 0.1, ChatGPT
+	// will penalize tokens that have been generated more frequently in the
+	// sequence, making them less likely to be selected. This can be used to produce
+	// more diverse and interesting completions, as the model will avoid repeating
+	// the same tokens over and over.
+	frequency_penalty f32 // Min: -2.0, Max: 2.0.
 	// This parameter is used to specify the number of completions to generate
 	// for each prompt, and then return the highest-scoring completion(s). For example,
 	// if you set best_of to 3, the model will generate 3 completions for each prompt,
 	// and then return the highest-scoring completion(s). This can be useful if you want
 	// to ensure that the model returns the best possible completion(s) for each prompt.
-	best_of int = 1 // Min: 1, Max: 100.
+	best_of u8 = 1 // Min: 1, Max: 100.
 }
 
 // verify verifies that the SingularGenerationConfig is valid.
 fn (c GenerationConfig) verify() ! {
-	if c.max_tokens < 1 || c.max_tokens > 10240 {
+	if c.max_tokens < 1 || c.max_tokens > 4096 {
 		return error('max_tokens must be between 1 and 10240')
 	}
 	if c.temperature < 0 || c.temperature > 2 {
@@ -60,10 +60,10 @@ fn (c GenerationConfig) verify() ! {
 	if c.top_p < 0 || c.top_p > 1 {
 		return error('top_p must be between 0 and 1')
 	}
-	if c.frequency_penalty < 0 || c.frequency_penalty > 1 {
+	if c.frequency_penalty < -2 || c.frequency_penalty > 2 {
 		return error('frequency_penalty must be between 0 and 1')
 	}
-	if c.presence_penalty < 0 || c.presence_penalty > 1 {
+	if c.presence_penalty < -2 || c.presence_penalty > 2 {
 		return error('presence_penalty must be between 0 and 1')
 	}
 	if c.best_of < 1 || c.best_of > 100 {

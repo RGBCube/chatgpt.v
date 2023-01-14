@@ -5,11 +5,11 @@ struct Body {
 	model             string = 'text-davinci-003'
 	prompt            string
 	max_tokens        int
-	stop              string
-	n                 u8
 	temperature       f32
 	top_p             f32
-	frequency_penalty f32
+	n                 u8
+	stop              string
 	presence_penalty  f32
+	frequency_penalty f32
 	best_of           int
 }
